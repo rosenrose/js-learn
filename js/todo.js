@@ -40,7 +40,7 @@ function drawTodo(newTodo) {
 }
 
 function deleteTodo(event) {
-  const li = event.target.parentNode;
+  const li = event.target.closest("li");
   const id = li.id;
   console.log(id);
 

@@ -12,8 +12,8 @@ function onGeoOk(position) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const [weather, city] = weatherContainer.querySelectorAll("span");
-      weather.textContent = `${data.weather[0].main} / ${data.main.temp}°C`;
+      const [info, city] = weatherContainer.querySelectorAll("p");
+      info.textContent = `${data.weather[0].main} / ${data.main.temp}°C`;
       city.textContent = data.name;
     });
 }

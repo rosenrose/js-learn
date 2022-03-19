@@ -9,27 +9,39 @@
   </head>
   <body>
     <h2 id="clock">00 : 00 : 00</h2>
-    <form id="login-form" hidden>
-      <input type="text" required maxlength="15" placeholder="name?" />
-      <input type="submit" value="Log In" />
+    <form id="login-form">
+      <input
+        type="text"
+        minlength="1"
+        maxlength="30"
+        placeholder="Hello, what's your name?"
+        required
+      />
+      <div>
+        <button>Log In</button>
+      </div>
     </form>
-    <h1 id="greeting" hidden></h1>
-    <form id="todo-form">
-      <input type="text" placeholder="write and enter" required />
-    </form>
-    <ul id="todo-list"></ul>
-    <div id="quotes">
-      <span></span>
-      <span></span>
-    </div>
-    <div id="weather">
-      <span></span>
-      <span></span>
+    <div id="after-login">
+      <h1 id="greeting" class="shadow-white"></h1>
+      <form id="todo-form">
+        <input type="text" placeholder="Write your todo" required />
+      </form>
+      <ul id="todo-list" class="shadow-white"></ul>
+      <div id="quotes" class="shadow-white">
+        <p></p>
+        <span></span>
+      </div>
+      <div id="weather">
+        <p id="weather-info"></p>
+        <p id="weather-city"></p>
+      </div>
     </div>
     <template id="todo-template">
       <li>
-        <span></span>
-        <button></button>
+        <div>
+          <span></span>
+          <button></button>
+        </div>
       </li>
     </template>
     <script src="js/greetings.js"></script>

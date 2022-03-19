@@ -41,7 +41,8 @@ const quotes = [
   },
 ];
 
-const [quote, author] = document.querySelectorAll("#quotes span");
+const quote = document.querySelector("#quotes p");
+const author = document.querySelector("#quotes span");
 const todaysQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
 quote.textContent = todaysQuote.quote;
