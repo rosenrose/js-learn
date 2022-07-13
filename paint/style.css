@@ -1,0 +1,63 @@
+@import "reset.css";
+
+body {
+  background-color: #f6f9fc;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em 0;
+}
+
+.canvas {
+  background-color: white;
+  border-radius: 2em;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.controls {
+  margin-top: 3em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controls_range {
+  margin-bottom: 2em;
+}
+
+.controls_btns {
+  margin-bottom: 2em;
+}
+
+.controls_btns button {
+  all: unset;
+  cursor: pointer;
+  background-color: white;
+  padding: 0.5em 0;
+  width: 6em;
+  text-align: center;
+  border-radius: 0.5em;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 0.15em solid rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.7);
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 1em;
+}
+
+.controls_btns button:active {
+  transform: scale(0.98);
+}
+
+.controls_colors {
+  display: flex;
+}
+
+.controls_color {
+  width: 3em;
+  height: 3em;
+  border-radius: 3em;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}

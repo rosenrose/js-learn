@@ -1,54 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>Momentum</title>
+    <title>Javascript for Beginners</title>
+    <style>
+      ul {
+        height: 50vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 1.5em;
+        list-style-type: none;
+      }
+    </style>
   </head>
   <body>
-    <h2 id="clock">00 : 00 : 00</h2>
-    <form id="login-form">
-      <input
-        type="text"
-        minlength="1"
-        maxlength="30"
-        placeholder="Hello, what's your name?"
-        required
-      />
-      <div>
-        <button>Log In</button>
-      </div>
-    </form>
-    <div id="after-login">
-      <h1 id="greeting" class="shadow-white"></h1>
-      <form id="todo-form">
-        <input type="text" placeholder="Write your todo" required />
-      </form>
-      <ul id="todo-list" class="shadow-white"></ul>
-      <div id="quotes" class="shadow-white">
-        <p></p>
-        <span></span>
-      </div>
-      <div id="weather">
-        <p id="weather-info"></p>
-        <p id="weather-city"></p>
-      </div>
-    </div>
-    <template id="todo-template">
-      <li>
-        <div>
-          <span></span>
-          <button></button>
-        </div>
-      </li>
-    </template>
-    <script src="js/greetings.js"></script>
-    <script src="js/clock.js"></script>
-    <script src="js/quotes.js"></script>
-    <script src="js/background.js"></script>
-    <script src="js/todo.js"></script>
-    <script src="js/weather.js"></script>
+    <ul>
+      <li><a href="challenge.html" target="_blank">Challenge</a></li>
+      <li><a href="paint.html" target="_blank">Paint</a></li>
+    </ul>
   </body>
 </html>
