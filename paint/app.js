@@ -22,7 +22,7 @@ canvas.addEventListener("click", handleCanvasClick);
 canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 
 document
-  .querySelectorAll(".controls_color")
+  .querySelectorAll(".controls_color:not(#colorSelect)")
   .forEach((color) => color.addEventListener("click", handleColorClick));
 
 range.addEventListener("input", handleRangeChange);
