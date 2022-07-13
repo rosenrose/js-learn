@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const range = document.querySelector("#jsRange");
 const mode = document.querySelector("#jsMode");
 const save = document.querySelector("#jsSave");
+const colorInput = document.querySelector("#colorInput");
 let isPainting = false;
 let filling = false;
 
@@ -13,18 +14,21 @@ ctx.strokeStyle = initColor;
 ctx.fillStyle = initColor;
 ctx.lineWidth = range.value;
 
-canvas?.addEventListener("mousemove", onMouseMove);
-canvas?.addEventListener("mousedown", startPainting);
-canvas?.addEventListener("mouseleave", stopPainting);
-canvas?.addEventListener("mouseup", stopPainting);
-canvas?.addEventListener("click", handleCanvasClick);
-canvas?.addEventListener("contextmenu", (event) => event.preventDefault());
+canvas.addEventListener("mousemove", onMouseMove);
+canvas.addEventListener("mousedown", startPainting);
+canvas.addEventListener("mouseleave", stopPainting);
+canvas.addEventListener("mouseup", stopPainting);
+canvas.addEventListener("click", handleCanvasClick);
+canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 
-document.querySelectorAll(".controls_color").forEach((color) => color.addEventListener("click", handleColorClick));
+document
+  .querySelectorAll(".controls_color")
+  .forEach((color) => color.addEventListener("click", handleColorClick));
 
-range?.addEventListener("input", handleRangeChange);
-mode?.addEventListener("click", handleModeClick);
-save?.addEventListener("click", handleSaveClick);
+range.addEventListener("input", handleRangeChange);
+mode.addEventListener("click", handleModeClick);
+save.addEventListener("click", handleSaveClick);
+colorInput.addEventListener("change", handleColorInput);
 
 function onMouseMove(event) {
   const x = event.offsetX;
@@ -49,6 +53,12 @@ function stopPainting() {
 
 function handleColorClick(event) {
   const color = event.target.style.backgroundColor;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+}
+
+function handleColorInput(event) {
+  const color = event.target.value;
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
 }
