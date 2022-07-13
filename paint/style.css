@@ -76,14 +76,11 @@ body {
     rgba(251, 7, 217),
     rgba(255, 0, 0, 1)
   );
-  position: relative;
 }
 
 #colorInput {
   width: 0;
   height: 0;
+  opacity: 0;
   z-index: -1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
 }
