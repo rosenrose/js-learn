@@ -3,9 +3,11 @@ const ctx = canvas.getContext("2d");
 const range = document.querySelector("#jsRange");
 const mode = document.querySelector("#jsMode");
 const save = document.querySelector("#jsSave");
+const random = document.querySelector("#random");
 const colorInput = document.querySelector("#colorInput");
 let isPainting = false;
 let filling = false;
+let isRandom = false;
 
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -29,18 +31,23 @@ range.addEventListener("input", handleRangeChange);
 mode.addEventListener("click", handleModeClick);
 save.addEventListener("click", handleSaveClick);
 colorInput.addEventListener("change", handleColorInput);
+random.addEventListener("click", () => {
+  random.textContent = isRandom ? "Random" : "Normal";
+  isRandom = !isRandom;
+});
 
 function onMouseMove(event) {
-  const x = event.offsetX;
-  const y = event.offsetY;
+  const { offsetX: x, offsetY: y } = event;
 
   if (isPainting) {
     ctx.lineTo(x, y);
+    if (isRandom) {
+      ctx.strokeStyle = randomColor();
+    }
     ctx.stroke();
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
   }
+  ctx.beginPath();
+  ctx.moveTo(x, y);
 }
 
 function startPainting() {
@@ -74,6 +81,9 @@ function handleModeClick(event) {
 
 function handleCanvasClick() {
   if (filling) {
+    if (isRandom) {
+      ctx.fillStyle = randomColor();
+    }
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 }
@@ -84,4 +94,9 @@ function handleSaveClick() {
   link.href = image;
   link.download = "image.png";
   link.click();
+}
+
+function randomColor() {
+  //prettier-ignore
+  return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
 }
