@@ -1,65 +1,91 @@
 @import "reset.css";
 
+:root {
+  --shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: #f6f9fc;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2em 0;
+  padding: 2rem 0;
+}
+main {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
-.canvas {
+#canvas {
   background-color: white;
-  border-radius: 2em;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 2rem;
+  box-shadow: var(--shadow);
 }
 
 .controls {
-  margin-top: 3em;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2rem;
 }
 
-.controls_range {
-  margin-bottom: 2em;
+.controls_range #range {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
-
-.controls_btns {
-  margin-bottom: 2em;
+.controls_range #range::after {
+  content: attr(value);
+  position: absolute;
+  right: -3.5rem;
+  font-size: 1.1rem;
+  background-color: white;
+  width: 2.5rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  border: 0.15rem solid rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .controls_btns button {
   all: unset;
   cursor: pointer;
   background-color: white;
-  padding: 0.5em 0;
-  width: 6em;
+  padding: 0.5rem 0;
+  width: 6rem;
   text-align: center;
-  border-radius: 0.5em;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-  border: 0.15em solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  border: 0.15rem solid rgba(0, 0, 0, 0.2);
   color: rgba(0, 0, 0, 0.7);
   text-transform: uppercase;
   font-weight: 800;
-  font-size: 1em;
+  font-size: 1rem;
 }
 
 .controls_btns button:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
 .controls_colors {
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .controls_color {
-  width: 3em;
-  height: 3em;
-  border-radius: 3em;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
 }
 
 #colorSelect {
@@ -79,4 +105,8 @@ body {
   height: 0;
   opacity: 0;
   z-index: -1;
+}
+
+#colorDisplay {
+  padding: 0;
 }

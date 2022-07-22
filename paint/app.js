@@ -1,20 +1,29 @@
-const canvas = document.querySelector("#jsCanvas");
+const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
-const range = document.querySelector("#jsRange");
-const mode = document.querySelector("#jsMode");
-const save = document.querySelector("#jsSave");
+const range = document.querySelector("#range");
+const mode = document.querySelector("#mode");
+const save = document.querySelector("#save");
 const random = document.querySelector("#random");
+const reset = document.querySelector("#reset");
 const colorInput = document.querySelector("#colorInput");
+const colorDisplay = document.querySelector("#colorDisplay");
 let isPainting = false;
-let filling = false;
+let isFilling = false;
 let isRandom = false;
+let x, y;
+const randomValue = () => Math.floor(Math.random() * 256);
+const randomColor = () => `rgb(${randomValue()}, ${randomValue()}, ${randomValue()})`;
 
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 const initColor = document.querySelector(".controls_color:first-child").style.backgroundColor;
 ctx.strokeStyle = initColor;
 ctx.fillStyle = initColor;
-ctx.lineWidth = range.value;
+
+const initWidth = range.value;
+ctx.lineWidth = initWidth;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
 
 canvas.addEventListener("mousemove", onMouseMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -30,28 +39,28 @@ document
 range.addEventListener("input", handleRangeChange);
 mode.addEventListener("click", handleModeClick);
 save.addEventListener("click", handleSaveClick);
+random.addEventListener("click", handleRandomClick);
+reset.addEventListener("click", handleResetClick);
 colorInput.addEventListener("change", handleColorInput);
-random.addEventListener("click", () => {
-  random.textContent = isRandom ? "Random" : "Normal";
-  isRandom = !isRandom;
-});
 
 function onMouseMove(event) {
-  const { offsetX: x, offsetY: y } = event;
+  [x, y] = [event.offsetX, event.offsetY];
 
-  if (isPainting) {
+  if (isPainting && !isFilling) {
     ctx.lineTo(x, y);
-    if (isRandom) {
-      ctx.strokeStyle = randomColor();
-    }
     ctx.stroke();
+    return;
   }
+
   ctx.beginPath();
   ctx.moveTo(x, y);
 }
 
 function startPainting() {
   isPainting = true;
+  if (isRandom) {
+    changeRandomColor();
+  }
 }
 
 function stopPainting() {
@@ -59,33 +68,39 @@ function stopPainting() {
 }
 
 function handleColorClick(event) {
-  const color = event.target.style.backgroundColor;
-  ctx.strokeStyle = color;
-  ctx.fillStyle = color;
+  changeColor(event.target.style.backgroundColor);
 }
 
 function handleColorInput(event) {
-  const color = event.target.value;
+  changeColor(event.target.value);
+}
+
+function changeColor(color) {
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
+  colorDisplay.value = color.includes("rgb") ? rgbTohex(color) : color;
 }
 
 function handleRangeChange(event) {
-  ctx.lineWidth = event.target.value;
+  const { value } = event.target;
+  ctx.lineWidth = value;
+  event.target.setAttribute("value", parseFloat(value).toFixed(1));
 }
 
 function handleModeClick(event) {
-  filling = !filling;
-  event.target.textContent = filling ? "Paint" : "Fill";
+  event.target.textContent = isFilling ? "Fill" : "Paint";
+  isFilling = !isFilling;
 }
 
 function handleCanvasClick() {
-  if (filling) {
-    if (isRandom) {
-      ctx.fillStyle = randomColor();
-    }
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (!isFilling) {
+    return;
   }
+
+  if (isRandom) {
+    changeColor(randomColor());
+  }
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function handleSaveClick() {
@@ -96,7 +111,36 @@ function handleSaveClick() {
   link.click();
 }
 
-function randomColor() {
-  //prettier-ignore
-  return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+function handleRandomClick() {
+  random.textContent = isRandom ? "Random" : "Normal";
+  isRandom = !isRandom;
+}
+
+function handleResetClick() {
+  ctx.strokeStyle = "black";
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.lineWidth = initWidth;
+  range.value = initWidth;
+  range.setAttribute("value", initWidth);
+  colorDisplay.value = "black";
+}
+
+function changeRandomColor() {
+  if (!isPainting || !isRandom || isFilling) {
+    return;
+  }
+
+  setTimeout(() => {
+    changeColor(randomColor());
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    changeRandomColor();
+  }, Math.random() * 100);
+}
+
+function rgbTohex(color) {
+  const rgb = /(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/.exec(color).slice(1);
+  const hex = rgb.map((c) => parseInt(c).toString(16).padStart(2, "0")).join("");
+  return `#${hex}`;
 }
