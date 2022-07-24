@@ -7,12 +7,19 @@ const random = document.querySelector("#random");
 const reset = document.querySelector("#reset");
 const colorInput = document.querySelector("#colorInput");
 const colorDisplay = document.querySelector("#colorDisplay");
+const fileInput = document.querySelector("#fileInput");
+const textInput = document.querySelector("#textInput");
+const saveLink = document.querySelector("#saveLink");
+const loadedImage = document.querySelector("#loadedImage");
+
 let isPainting = false;
 let isFilling = false;
 let isRandom = false;
 let x, y;
+
 const randomValue = () => Math.floor(Math.random() * 256);
 const randomColor = () => `rgb(${randomValue()}, ${randomValue()}, ${randomValue()})`;
+const DEFAULT_FONT_FACE = "sans-serif";
 
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -24,13 +31,16 @@ const initWidth = range.value;
 ctx.lineWidth = initWidth;
 ctx.lineCap = "round";
 ctx.lineJoin = "round";
+ctx.font = `${initWidth / 3}rem ${DEFAULT_FONT_FACE}`;
+
+ctx.save();
 
 canvas.addEventListener("mousemove", onMouseMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseleave", stopPainting);
 canvas.addEventListener("mouseup", stopPainting);
 canvas.addEventListener("click", handleCanvasClick);
-canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+canvas.addEventListener("contextmenu", handleCanvasRightClick);
 
 document
   .querySelectorAll(".controls_color:not(#colorSelect)")
@@ -42,6 +52,14 @@ save.addEventListener("click", handleSaveClick);
 random.addEventListener("click", handleRandomClick);
 reset.addEventListener("click", handleResetClick);
 colorInput.addEventListener("change", handleColorInput);
+fileInput.addEventListener("change", handleFileInput);
+loadedImage.addEventListener("load", (event) => {
+  ctx.drawImage(event.target, 0, 0, canvas.width, canvas.height);
+
+  fileInput.value = null;
+  URL.revokeObjectURL(event.target.src);
+  event.target.src = "";
+});
 
 function onMouseMove(event) {
   [x, y] = [event.offsetX, event.offsetY];
@@ -56,8 +74,13 @@ function onMouseMove(event) {
   ctx.moveTo(x, y);
 }
 
-function startPainting() {
+function startPainting(event) {
+  if (event.button === 2) {
+    return;
+  }
+
   isPainting = true;
+
   if (isRandom) {
     changeRandomColor();
   }
@@ -84,11 +107,12 @@ function changeColor(color) {
 function handleRangeChange(event) {
   const { value } = event.target;
   ctx.lineWidth = value;
+  ctx.font = `${value / 3}rem ${DEFAULT_FONT_FACE}`;
   event.target.setAttribute("value", parseFloat(value).toFixed(1));
 }
 
 function handleModeClick(event) {
-  event.target.textContent = isFilling ? "Fill" : "Paint";
+  event.target.textContent = isFilling ? "🧺Fill" : "🖌️Paint";
   isFilling = !isFilling;
 }
 
@@ -103,12 +127,21 @@ function handleCanvasClick() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
+function handleCanvasRightClick(event) {
+  event.preventDefault();
+  const text = textInput.value;
+
+  if (!text) {
+    return;
+  }
+
+  ctx.fillText(text, event.offsetX, event.offsetY);
+}
+
 function handleSaveClick() {
-  const image = canvas.toDataURL();
-  const link = document.createElement("a");
-  link.href = image;
-  link.download = "image.png";
-  link.click();
+  saveLink.href = canvas.toDataURL();
+  saveLink.click();
+  saveLink.href = "";
 }
 
 function handleRandomClick() {
@@ -117,13 +150,23 @@ function handleRandomClick() {
 }
 
 function handleResetClick() {
-  ctx.strokeStyle = "black";
+  if (!confirm("Sure?")) {
+    return;
+  }
+
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.lineWidth = initWidth;
+  ctx.restore();
+  ctx.save();
+
   range.value = initWidth;
   range.setAttribute("value", initWidth);
   colorDisplay.value = "black";
+}
+
+function handleFileInput(event) {
+  const file = event.target.files[0];
+  loadedImage.src = URL.createObjectURL(file);
 }
 
 function changeRandomColor() {
